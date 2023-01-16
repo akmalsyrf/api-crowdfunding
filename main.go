@@ -1,24 +1,25 @@
 package main
 
 import (
-	"bwastartup/handler"
-	"bwastartup/user"
+	"api-crowdfunding/handler"
+	"api-crowdfunding/user"
 	"fmt"
 	"log"
 
 	"github.com/gin-gonic/gin"
-	"gorm.io/driver/mysql"
+	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
 func main() {
-	dsn := "root:@tcp(127.0.0.1:3306)/bwa_startup?charset=utf8mb4&parseTime=True&loc=Local"
-	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	// dsn := "root:@tcp(127.0.0.1:5432)/bwa_startup?charset=utf8mb4&parseTime=True&loc=Local"
+	dsn := "host=localhost user=postgres password=password dbname=crowdfunding port=5432 sslmode=disable TimeZone=Asia/Shanghai"
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 
 	if err != nil {
 		log.Fatal(err.Error())
 	}
-	fmt.Println("Connected to MySQL")
+	fmt.Println("Connected to postgres")
 
 	userRepository := user.NewRepository(db)
 	userService := user.NewService(userRepository)

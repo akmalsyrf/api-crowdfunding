@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"bwastartup/user"
+	"api-crowdfunding/user"
 
 	"github.com/gin-gonic/gin"
 )
@@ -25,7 +25,7 @@ func (h *userHandler) RegisterUser(c *gin.Context) {
 	user, err := h.userService.RegisterUser(input)
 	if err != nil {
 		c.JSON(400, gin.H{"error": err.Error()})
+	} else {
+		c.JSON(200, user)
 	}
-
-	c.JSON(200, user)
 }
