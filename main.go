@@ -34,11 +34,11 @@ func main() {
 	userHandler := handler.NewUserHandler(userService)
 
 	router := gin.Default()
-
-	router.GET("/", getIndex)
 	api := router.Group("/api/v1")
 
+	router.GET("/", getIndex)
 	api.POST("/user", userHandler.RegisterUser)
+	api.POST("/session", userHandler.Login)
 
 	router.Run(":8080")
 }
