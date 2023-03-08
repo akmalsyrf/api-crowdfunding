@@ -39,6 +39,7 @@ func main() {
 	router.GET("/", getIndex)
 	api.POST("/user", userHandler.RegisterUser)
 	api.POST("/session", userHandler.Login)
+	api.POST("/email-check", userHandler.CheckEmailAvailability)
 
 	router.Run(":8080")
 }
