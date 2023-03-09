@@ -1,6 +1,11 @@
 package helper
 
-import "github.com/go-playground/validator/v10"
+import (
+	"errors"
+	"os"
+
+	"github.com/go-playground/validator/v10"
+)
 
 type Response struct {
 	Meta Meta        `json:"meta"`
@@ -36,4 +41,18 @@ func FormatValidationError(err error) []string {
 	}
 
 	return errors
+}
+
+func ValidateFolderExist(path string) error {
+	_, err := os.Stat(path)
+	isNotExist := errors.Is(err, os.ErrNotExist)
+
+	if isNotExist {
+		err := os.Mkdir(path, os.ModePerm)
+
+		if err != nil {
+			return err
+		}
+	}
+	return nil
 }

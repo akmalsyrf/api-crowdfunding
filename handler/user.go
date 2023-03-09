@@ -139,7 +139,17 @@ func (h *userHandler) UploadAvatar(c *gin.Context) {
 	//misal dari jwt dapet id 1
 	userID := 14
 
-	path := fmt.Sprintf("images/%d-%s", userID, file.Filename)
+	path := "images/"
+
+	err = helper.ValidateFolderExist(path)
+	if err != nil {
+		errorMessage := gin.H{"is_uploaded": false, "error": err}
+		response := helper.APIResponse("Failed to upload avatar image", 500, "failed", errorMessage)
+		c.JSON(400, response)
+		return
+	}
+
+	path = fmt.Sprintf("images/%d-%s", userID, file.Filename)
 
 	err = c.SaveUploadedFile(file, path)
 	if err != nil {
