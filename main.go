@@ -2,6 +2,7 @@ package main
 
 import (
 	"api-crowdfunding/auth"
+	"api-crowdfunding/campaign"
 	"api-crowdfunding/handler"
 	"api-crowdfunding/helper"
 	"api-crowdfunding/user"
@@ -29,14 +30,19 @@ func main() {
 	}
 	fmt.Println("Connected to postgres")
 
-	if err := db.AutoMigrate(&user.User{}); err != nil {
+	if err := db.AutoMigrate(&user.User{}, &campaign.Campaign{}); err != nil {
 		log.Fatalln(err)
 	}
 
 	userRepository := user.NewRepository(db)
+	campaignRepository := campaign.NewRepository(db)
+
 	userService := user.NewService(userRepository)
 	authService := auth.NewService()
+	campaignService := campaign.NewService(campaignRepository)
+
 	userHandler := handler.NewUserHandler(userService, authService)
+	campaignHandler := handler.NewCampaignHandler(campaignService)
 
 	router := gin.Default()
 	api := router.Group("/api/v1")
@@ -46,6 +52,8 @@ func main() {
 	api.POST("/session", userHandler.Login)
 	api.POST("/email-check", userHandler.CheckEmailAvailability)
 	api.POST("/avatar", authMiddleware(authService, userService), userHandler.UploadAvatar)
+
+	api.GET("/campaigns", campaignHandler.GetCampaigns)
 
 	router.Run(":8080")
 }
