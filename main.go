@@ -4,13 +4,11 @@ import (
 	"api-crowdfunding/auth"
 	"api-crowdfunding/campaign"
 	"api-crowdfunding/handler"
-	"api-crowdfunding/helper"
+	"api-crowdfunding/middleware"
 	"api-crowdfunding/user"
 	"fmt"
 	"log"
-	"strings"
 
-	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -52,58 +50,11 @@ func main() {
 	api.POST("/user", userHandler.RegisterUser)
 	api.POST("/session", userHandler.Login)
 	api.POST("/email-check", userHandler.CheckEmailAvailability)
-	api.POST("/avatar", authMiddleware(authService, userService), userHandler.UploadAvatar)
+	api.POST("/avatar", middleware.AuthMiddleware(authService, userService), userHandler.UploadAvatar)
 
 	api.GET("/campaigns", campaignHandler.GetCampaigns)
 	api.GET("/campaign/:id", campaignHandler.GetCampaign)
+	api.POST("/campaign", middleware.AuthMiddleware(authService, userService), campaignHandler.CreateCampaign)
 
 	router.Run(":8080")
-}
-
-func authMiddleware(authService auth.Service, userService user.Service) gin.HandlerFunc {
-	return func(c *gin.Context) {
-		authHeader := c.GetHeader("Authorization")
-
-		if !strings.Contains(authHeader, "Bearer") {
-			response := helper.APIResponse("Unauthorized", 401, "error", nil)
-			c.AbortWithStatusJSON(401, response)
-			return
-		}
-
-		// "Bearer (token)"
-		tokenString := ""
-		arrayToken := strings.Split(authHeader, " ")
-
-		if len(arrayToken) == 2 {
-			tokenString = arrayToken[1]
-		}
-
-		token, err := authService.ValidateToken(tokenString)
-
-		if err != nil {
-			response := helper.APIResponse("Unauthorized", 401, "error", nil)
-			c.AbortWithStatusJSON(401, response)
-			return
-		}
-
-		claim, ok := token.Claims.(jwt.MapClaims)
-
-		if !ok || !token.Valid {
-			response := helper.APIResponse("Unauthorized", 401, "error", nil)
-			c.AbortWithStatusJSON(401, response)
-			return
-		}
-
-		userID := int(claim["user_id"].(float64))
-
-		user, err := userService.GetUserById(userID)
-
-		if err != nil {
-			response := helper.APIResponse("Unauthorized", 401, "error", nil)
-			c.AbortWithStatusJSON(401, response)
-			return
-		}
-
-		c.Set("currentUser", user)
-	}
 }

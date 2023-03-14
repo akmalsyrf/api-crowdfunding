@@ -3,6 +3,7 @@ package handler
 import (
 	"api-crowdfunding/campaign"
 	"api-crowdfunding/helper"
+	"api-crowdfunding/user"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -49,5 +50,31 @@ func (h *campaignHandler) GetCampaign(c *gin.Context) {
 	}
 
 	response := helper.APIResponse("Success get detail campaign", 200, "success", campaign.FormatCampaignDetail(campaignDetail))
+	c.JSON(200, response)
+}
+
+func (h *campaignHandler) CreateCampaign(c *gin.Context) {
+	currentUser := c.MustGet("currentUser").(user.User)
+	var input campaign.CreateCampaignInput
+	input.User = currentUser
+
+	errInput := c.ShouldBindJSON(&input)
+	if errInput != nil {
+		errors := helper.FormatValidationError(errInput)
+		errorMessage := gin.H{"errors": errors}
+		response := helper.APIResponse("Failed to create campaign", 422, "error", errorMessage)
+		c.JSON(422, response)
+		return
+	}
+
+	newCampaign, err := h.campaignService.CreateCampaign(input)
+
+	if err != nil {
+		response := helper.APIResponse("Failed to create campaign", 400, "error", nil)
+		c.JSON(400, response)
+		return
+	}
+
+	response := helper.APIResponse("Success create campaign", 200, "success", campaign.FormatCampaign(newCampaign))
 	c.JSON(200, response)
 }
