@@ -30,3 +30,24 @@ func (h *campaignHandler) GetCampaigns(c *gin.Context) {
 	response := helper.APIResponse("List of campaigns", 200, "success", formatter)
 	c.JSON(200, response)
 }
+
+func (h *campaignHandler) GetCampaign(c *gin.Context) {
+	var input campaign.GetCampaignDetailInput
+
+	errInput := c.ShouldBindUri(&input)
+	if errInput != nil {
+		response := helper.APIResponse("Failed to get detail campaign", 400, "error", nil)
+		c.JSON(400, response)
+		return
+	}
+
+	campaignDetail, err := h.campaignService.GetCampaignByID(input)
+	if err != nil {
+		response := helper.APIResponse("Failed to get detail campaign", 400, "error", nil)
+		c.JSON(400, response)
+		return
+	}
+
+	response := helper.APIResponse("Success get detail campaign", 200, "success", campaign.FormatCampaignDetail(campaignDetail))
+	c.JSON(200, response)
+}

@@ -1,6 +1,7 @@
 package campaign
 
 import (
+	"api-crowdfunding/user"
 	"time"
 
 	"gorm.io/gorm"
@@ -21,6 +22,7 @@ type Campaign struct {
 	CreatedAt        time.Time
 	UpdatedAt        time.Time
 	CampaignImages   []CampaignImage
+	User             user.User
 }
 
 type CampaignImage struct {
