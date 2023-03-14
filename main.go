@@ -28,7 +28,7 @@ func main() {
 	}
 	fmt.Println("Connected to postgres")
 
-	if err := db.AutoMigrate(&user.User{}, &campaign.Campaign{}); err != nil {
+	if err := db.AutoMigrate(&user.User{}, &campaign.Campaign{}, &campaign.CampaignImage{}); err != nil {
 		log.Fatalln(err)
 	}
 
