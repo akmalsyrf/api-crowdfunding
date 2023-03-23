@@ -56,3 +56,10 @@ func ValidateFolderExist(path string) error {
 	}
 	return nil
 }
+
+func DeleteFile(path string) error {
+	if err := os.Remove(path); err != nil {
+		return err
+	}
+	return nil
+}

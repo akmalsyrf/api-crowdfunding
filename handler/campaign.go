@@ -4,6 +4,7 @@ import (
 	"api-crowdfunding/campaign"
 	"api-crowdfunding/helper"
 	"api-crowdfunding/user"
+	"fmt"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -108,5 +109,68 @@ func (h *campaignHandler) UpdateCampaign(c *gin.Context) {
 	}
 
 	response := helper.APIResponse("Success update campaign", 200, "success", campaign.FormatCampaign(updatedCampaign))
+	c.JSON(200, response)
+}
+
+func (h *campaignHandler) UploadImage(c *gin.Context) {
+	var input campaign.CreateCampaignImageInput
+
+	errInput := c.ShouldBind(&input)
+	if errInput != nil {
+		errors := helper.FormatValidationError(errInput)
+		errorMessage := gin.H{"errors": errors}
+		response := helper.APIResponse("Failed to create campaign", 422, "error", errorMessage)
+		c.JSON(422, response)
+		return
+	}
+
+	file, err := c.FormFile("file")
+	if err != nil {
+		errorMessage := gin.H{"is_uploaded": false, "error": err.Error()}
+		response := helper.APIResponse("Failed to upload campaign image", 400, "failed", errorMessage)
+		c.JSON(400, response)
+		return
+	}
+	currentUser := c.MustGet("currentUser").(user.User)
+	input.User = currentUser
+
+	path := "images/"
+
+	err = helper.ValidateFolderExist(path)
+	if err != nil {
+		errorMessage := gin.H{"is_uploaded": false, "error": err.Error()}
+		response := helper.APIResponse("Failed to upload campaign image", 500, "failed", errorMessage)
+		c.JSON(400, response)
+		return
+	}
+
+	path = fmt.Sprintf("images/%d-%s", input.User.ID, file.Filename)
+
+	err = c.SaveUploadedFile(file, path)
+	if err != nil {
+		errorMessage := gin.H{"is_uploaded": false, "error": err.Error()}
+		response := helper.APIResponse("Failed to upload campaign image", 400, "failed", errorMessage)
+		c.JSON(400, response)
+		return
+	}
+
+	_, err = h.campaignService.SaveCampaignImage(input, path)
+	if err != nil {
+		errFile := helper.DeleteFile(path)
+		if errFile != nil {
+			errorMessage := gin.H{"is_uploaded": false, "error": errFile.Error()}
+			response := helper.APIResponse("Failed to upload campaign image", 400, "failed", errorMessage)
+			c.JSON(400, response)
+			return
+		}
+
+		errorMessage := gin.H{"is_uploaded": false, "error": err.Error()}
+		response := helper.APIResponse("Failed to upload campaign image", 400, "failed", errorMessage)
+		c.JSON(400, response)
+		return
+	}
+
+	data := gin.H{"is_uploaded": true}
+	response := helper.APIResponse("Success to upload campaign image", 200, "success", data)
 	c.JSON(200, response)
 }

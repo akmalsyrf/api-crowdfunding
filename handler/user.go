@@ -73,8 +73,8 @@ func (h *userHandler) Login(c *gin.Context) {
 
 	if err != nil {
 		errorMessage := gin.H{"errors": err.Error()}
-		response := helper.APIResponse("Login failed", 500, "failed", errorMessage)
-		c.JSON(500, response)
+		response := helper.APIResponse("Login failed", 400, "failed", errorMessage)
+		c.JSON(400, response)
 		return
 	}
 
