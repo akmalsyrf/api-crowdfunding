@@ -38,14 +38,16 @@ func (h *campaignHandler) GetCampaign(c *gin.Context) {
 
 	errInput := c.ShouldBindUri(&input)
 	if errInput != nil {
-		response := helper.APIResponse("Failed to get detail campaign", 400, "error", nil)
+		errors := helper.FormatValidationError(errInput)
+		errorMessage := gin.H{"errors": errors}
+		response := helper.APIResponse("Failed to get detail campaign", 400, "error", errorMessage)
 		c.JSON(400, response)
 		return
 	}
 
 	campaignDetail, err := h.campaignService.GetCampaignByID(input)
 	if err != nil {
-		response := helper.APIResponse("Failed to get detail campaign", 400, "error", nil)
+		response := helper.APIResponse("Failed to get detail campaign", 400, "error", err.Error())
 		c.JSON(400, response)
 		return
 	}

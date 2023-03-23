@@ -5,6 +5,7 @@ import (
 	"api-crowdfunding/campaign"
 	"api-crowdfunding/handler"
 	"api-crowdfunding/middleware"
+	"api-crowdfunding/transaction"
 	"api-crowdfunding/user"
 	"fmt"
 	"log"
@@ -28,19 +29,23 @@ func main() {
 	}
 	fmt.Println("Connected to postgres")
 
-	if err := db.AutoMigrate(&user.User{}, &campaign.Campaign{}, &campaign.CampaignImage{}); err != nil {
+	if err := db.AutoMigrate(&user.User{}, &campaign.Campaign{},
+		&campaign.CampaignImage{}, &transaction.Transaction{}); err != nil {
 		log.Fatalln(err)
 	}
 
 	userRepository := user.NewRepository(db)
 	campaignRepository := campaign.NewRepository(db)
+	transactionRepository := transaction.NewRepository(db)
 
 	userService := user.NewService(userRepository)
 	authService := auth.NewService()
 	campaignService := campaign.NewService(campaignRepository)
+	transactionService := transaction.NewService(transactionRepository)
 
 	userHandler := handler.NewUserHandler(userService, authService)
 	campaignHandler := handler.NewCampaignHandler(campaignService)
+	transactionHandler := handler.NewTransactionHandler(transactionService)
 
 	router := gin.Default()
 	router.Static("/images", "./images")
@@ -57,6 +62,8 @@ func main() {
 	api.POST("/campaign", middleware.AuthMiddleware(authService, userService), campaignHandler.CreateCampaign)
 	api.PUT("/campaign/:id", middleware.AuthMiddleware(authService, userService), campaignHandler.UpdateCampaign)
 	api.POST("/campaign-image", middleware.AuthMiddleware(authService, userService), campaignHandler.UploadImage)
+
+	api.GET("/campaign/:id/transactions", middleware.AuthMiddleware(authService, userService), transactionHandler.GetCampaignTransactions)
 
 	router.Run(":8080")
 }
