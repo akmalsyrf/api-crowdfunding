@@ -4,7 +4,6 @@ import (
 	"api-crowdfunding/helper"
 	"api-crowdfunding/transaction"
 	"api-crowdfunding/user"
-	"fmt"
 
 	"github.com/gin-gonic/gin"
 )
@@ -31,7 +30,6 @@ func (h *transactionHandler) GetCampaignTransactions(c *gin.Context) {
 		c.JSON(400, response)
 		return
 	}
-	fmt.Println("PARAMS ", input.ID)
 
 	transactions, err := h.service.GetTransactionByCampaignID(input)
 	if err != nil {
@@ -42,5 +40,23 @@ func (h *transactionHandler) GetCampaignTransactions(c *gin.Context) {
 	}
 
 	response := helper.APIResponse("Success get campaign transaction", 200, "success", transaction.FormatCampaignTransactions(transactions))
+	c.JSON(200, response)
+}
+
+func (h *transactionHandler) GetUserTransaction(c *gin.Context) {
+
+	currentUser := c.MustGet("currentUser").(user.User)
+	userID := currentUser.ID
+
+	transactions, err := h.service.GetTransactionByUserID(userID)
+	if err != nil {
+		errorMessage := gin.H{"errors": err.Error()}
+		response := helper.APIResponse("Failed to get campaign's transaction", 400, "error", errorMessage)
+		c.JSON(400, response)
+		return
+	}
+
+	formatter := transaction.FormatUserTransactions(transactions)
+	response := helper.APIResponse("Success get campaign transaction", 200, "success", formatter)
 	c.JSON(200, response)
 }

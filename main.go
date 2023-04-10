@@ -64,6 +64,7 @@ func main() {
 	api.POST("/campaign-image", middleware.AuthMiddleware(authService, userService), campaignHandler.UploadImage)
 
 	api.GET("/campaign/:id/transactions", middleware.AuthMiddleware(authService, userService), transactionHandler.GetCampaignTransactions)
+	api.GET("/transactions", middleware.AuthMiddleware(authService, userService), transactionHandler.GetUserTransaction)
 
 	router.Run(":8080")
 }

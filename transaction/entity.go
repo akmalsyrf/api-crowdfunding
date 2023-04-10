@@ -1,6 +1,7 @@
 package transaction
 
 import (
+	"api-crowdfunding/campaign"
 	"api-crowdfunding/user"
 	"time"
 
@@ -15,6 +16,7 @@ type Transaction struct {
 	Amount     int
 	Status     string
 	Code       string
+	Campaign   campaign.Campaign
 	CreatedAt  time.Time
 	UpdatedAt  time.Time
 	User       user.User
