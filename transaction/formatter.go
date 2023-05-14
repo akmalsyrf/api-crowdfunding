@@ -39,7 +39,7 @@ type UserTransactionFormatter struct {
 	Amount    int               `json:"amount"`
 	Status    string            `json:"status"`
 	CreatedAt time.Time         `json:"created_at"`
-	Campaign  CampaignFormatter `json:campaign`
+	Campaign  CampaignFormatter `json:"campaign"`
 }
 
 type CampaignFormatter struct {
