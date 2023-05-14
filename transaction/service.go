@@ -70,7 +70,7 @@ func (s *service) CreateTransaction(input CreateTransactionInput) (Transaction, 
 		return newTransaction, err
 	}
 
-	newTransaction.PaymentUrl = paymentURL
+	newTransaction.PaymentURL = paymentURL
 
 	newTransaction, err = s.repository.Update(transaction)
 	if err != nil {
