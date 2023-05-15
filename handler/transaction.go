@@ -9,7 +9,7 @@ import (
 )
 
 type transactionHandler struct {
-	service transaction.Service
+	service        transaction.Service
 }
 
 func NewTransactionHandler(transactionService transaction.Service) *transactionHandler {
@@ -87,4 +87,27 @@ func (h *transactionHandler) CreateTransaction(c *gin.Context) {
 	formatter := transaction.FormatTransaction(newTransaction)
 	response := helper.APIResponse("Success create transaction", 200, "success", formatter)
 	c.JSON(200, response)
+}
+
+func (h *transactionHandler) GetNotification(c *gin.Context) {
+	var input transaction.TransactionNotificationInput
+
+	errInput := c.ShouldBindJSON(&input)
+	if errInput != nil {
+		errors := helper.FormatValidationError(errInput)
+		errorMessage := gin.H{"errors": errors}
+		response := helper.APIResponse("Failed to get notification", 422, "error", errorMessage)
+		c.JSON(422, response)
+		return
+	}
+
+	err := h.service.ProcessPayment(input)
+	if err != nil {
+		errorMessage := gin.H{"errors": err.Error()}
+		response := helper.APIResponse("Failed to get notification", 400, "error", errorMessage)
+		c.JSON(400, response)
+		return
+	}
+
+	c.JSON(200, input)
 }
