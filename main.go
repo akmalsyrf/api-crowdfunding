@@ -12,6 +12,8 @@ import (
 	"log"
 	"os"
 
+	cors "github.com/gin-contrib/cors"
+
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"
@@ -25,7 +27,7 @@ func getIndex(c *gin.Context) {
 func main() {
 	err := godotenv.Load(".env")
 	if err != nil {
-		fmt.Println(err)
+		log.Fatalln(err)
 	}
 	// dsn := "root:@tcp(127.0.0.1:5432)/bwa_startup?charset=utf8mb4&parseTime=True&loc=Local"
 	DB_HOST := os.Getenv("DB_HOST")
@@ -62,6 +64,7 @@ func main() {
 
 	router := gin.Default()
 	router.Static("/images", "./images")
+	router.Use(cors.Default())
 	api := router.Group("/api/v1")
 
 	router.GET("/", getIndex)
