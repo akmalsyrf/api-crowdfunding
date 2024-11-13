@@ -1,7 +1,7 @@
 package payment
 
 import (
-	"api-crowdfunding/user"
+	"api-crowdfunding/service/user"
 	"os"
 	"strconv"
 

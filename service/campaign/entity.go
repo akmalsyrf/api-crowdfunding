@@ -1,7 +1,7 @@
 package campaign
 
 import (
-	"api-crowdfunding/user"
+	"api-crowdfunding/service/user"
 	"time"
 
 	"gorm.io/gorm"

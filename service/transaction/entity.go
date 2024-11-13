@@ -1,8 +1,8 @@
 package transaction
 
 import (
-	"api-crowdfunding/campaign"
-	"api-crowdfunding/user"
+	"api-crowdfunding/service/campaign"
+	"api-crowdfunding/service/user"
 	"time"
 
 	"gorm.io/gorm"

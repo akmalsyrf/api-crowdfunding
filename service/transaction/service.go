@@ -1,8 +1,8 @@
 package transaction
 
 import (
-	"api-crowdfunding/campaign"
-	"api-crowdfunding/payment"
+	"api-crowdfunding/service/campaign"
+	"api-crowdfunding/service/payment"
 	"errors"
 	"strconv"
 )

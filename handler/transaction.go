@@ -1,19 +1,30 @@
 package handler
 
 import (
-	"api-crowdfunding/helper"
-	"api-crowdfunding/transaction"
-	"api-crowdfunding/user"
+	"api-crowdfunding/middleware"
+	"api-crowdfunding/service/auth"
+	"api-crowdfunding/service/transaction"
+	"api-crowdfunding/service/user"
+	"api-crowdfunding/utils/helper"
 
 	"github.com/gin-gonic/gin"
 )
 
 type transactionHandler struct {
-	service        transaction.Service
+	service     transaction.Service
+	userService user.Service
+	authService auth.Service
 }
 
-func NewTransactionHandler(transactionService transaction.Service) *transactionHandler {
-	return &transactionHandler{transactionService}
+func NewTransactionHandler(transactionService transaction.Service, userService user.Service, authService auth.Service) *transactionHandler {
+	return &transactionHandler{transactionService, userService, authService}
+}
+
+func (h *transactionHandler) Router(router *gin.RouterGroup) {
+	router.GET("/:id/campaign", middleware.AuthMiddleware(h.authService, h.userService), h.GetCampaignTransactions)
+	router.GET("/", middleware.AuthMiddleware(h.authService, h.userService), h.GetUserTransaction)
+	router.POST("/", middleware.AuthMiddleware(h.authService, h.userService), h.CreateTransaction)
+	router.POST("/notification", middleware.AuthMiddleware(h.authService, h.userService), h.GetNotification)
 }
 
 func (h *transactionHandler) GetCampaignTransactions(c *gin.Context) {

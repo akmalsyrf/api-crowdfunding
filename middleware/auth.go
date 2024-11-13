@@ -1,9 +1,9 @@
 package middleware
 
 import (
-	"api-crowdfunding/auth"
-	"api-crowdfunding/helper"
-	"api-crowdfunding/user"
+	"api-crowdfunding/service/auth"
+	"api-crowdfunding/service/user"
+	"api-crowdfunding/utils/helper"
 	"strings"
 
 	"github.com/dgrijalva/jwt-go"

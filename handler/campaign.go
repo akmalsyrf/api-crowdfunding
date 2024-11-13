@@ -1,9 +1,11 @@
 package handler
 
 import (
-	"api-crowdfunding/campaign"
-	"api-crowdfunding/helper"
-	"api-crowdfunding/user"
+	"api-crowdfunding/middleware"
+	"api-crowdfunding/service/auth"
+	"api-crowdfunding/service/campaign"
+	"api-crowdfunding/service/user"
+	"api-crowdfunding/utils/helper"
 	"fmt"
 	"strconv"
 
@@ -12,10 +14,20 @@ import (
 
 type campaignHandler struct {
 	campaignService campaign.Service
+	userService     user.Service
+	authService     auth.Service
 }
 
-func NewCampaignHandler(campaignService campaign.Service) *campaignHandler {
-	return &campaignHandler{campaignService}
+func NewCampaignHandler(campaignService campaign.Service, userService user.Service, authService auth.Service) *campaignHandler {
+	return &campaignHandler{campaignService, userService, authService}
+}
+
+func (h *campaignHandler) Router(router *gin.RouterGroup) {
+	router.GET("/", h.GetCampaigns)
+	router.GET("/:id", h.GetCampaign)
+	router.POST("/", middleware.AuthMiddleware(h.authService, h.userService), h.CreateCampaign)
+	router.PUT("/:id", middleware.AuthMiddleware(h.authService, h.userService), h.UpdateCampaign)
+	router.POST("/image", middleware.AuthMiddleware(h.authService, h.userService), h.UploadImage)
 }
 
 func (h *campaignHandler) GetCampaigns(c *gin.Context) {

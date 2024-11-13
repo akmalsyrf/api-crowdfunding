@@ -1,6 +1,6 @@
 package campaign
 
-import "api-crowdfunding/user"
+import "api-crowdfunding/service/user"
 
 type GetCampaignDetailInput struct {
 	ID int `uri:"id" binding:"required"`

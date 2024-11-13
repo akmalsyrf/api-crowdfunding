@@ -1,9 +1,10 @@
 package handler
 
 import (
-	"api-crowdfunding/auth"
-	"api-crowdfunding/helper"
-	"api-crowdfunding/user"
+	"api-crowdfunding/middleware"
+	"api-crowdfunding/service/auth"
+	"api-crowdfunding/service/user"
+	"api-crowdfunding/utils/helper"
 	"fmt"
 
 	"github.com/gin-gonic/gin"
@@ -16,6 +17,14 @@ type userHandler struct {
 
 func NewUserHandler(userService user.Service, authService auth.Service) *userHandler {
 	return &userHandler{userService, authService}
+}
+
+func (h *userHandler) Router(router *gin.RouterGroup) {
+	router.POST("/", h.RegisterUser)
+	router.POST("/session", h.Login)
+	router.POST("/email-check", h.CheckEmailAvailability)
+	router.POST("/avatar", middleware.AuthMiddleware(h.authService, h.userService), h.UploadAvatar)
+	router.GET("/fetch", middleware.AuthMiddleware(h.authService, h.userService), h.FetchUser)
 }
 
 func (h *userHandler) RegisterUser(c *gin.Context) {
