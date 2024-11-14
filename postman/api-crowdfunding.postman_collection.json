@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "8ef7d3cd-54ae-48c6-bbf8-2168db5c3df5",
+		"_postman_id": "8c4a9b6e-c749-4bd3-9ab7-fb48493f499f",
 		"name": "api-crowdfunding",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "18883374"
@@ -36,7 +36,102 @@
 							]
 						}
 					},
-					"response": []
+					"response": [
+						{
+							"name": "register",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\" : \"Akmal\",\n    \"occupation\":\"Software Developer\",\n    \"email\":\"akmal@mail.com\",\n    \"password\":\"password\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/api/v1/user",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"user"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 14 Nov 2024 03:12:19 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "280"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"meta\": {\n        \"message\": \"Account has been registered\",\n        \"code\": 200,\n        \"status\": \"success\"\n    },\n    \"data\": {\n        \"id\": 2,\n        \"name\": \"Akmal\",\n        \"occupation\": \"Software Developer\",\n        \"email\": \"akmal@mail.com\",\n        \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyfQ.ffFe_l2RKi1kWoIsbMTrUtQBYMUMsywugQ6oZ5pps_A\"\n    }\n}"
+						},
+						{
+							"name": "Conflict",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\" : \"Akmal\",\n    \"occupation\":\"Software Developer\",\n    \"email\":\"akmal@mail.com\",\n    \"password\":\"password\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/api/v1/user",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"user"
+									]
+								}
+							},
+							"status": "Conflict",
+							"code": 409,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 14 Nov 2024 03:38:06 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "89"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"meta\": {\n        \"message\": \"Email has been registered\",\n        \"code\": 409,\n        \"status\": \"failed\"\n    },\n    \"data\": null\n}"
+						}
+					]
 				},
 				{
 					"name": "login",
@@ -48,7 +143,8 @@
 									"var jsonData = pm.response.json();",
 									"pm.globals.set(\"accessTokenCrowdfunding\", jsonData.data.token);"
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -65,7 +161,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8080/api/v1/session",
+							"raw": "localhost:8080/api/v1/user/session",
 							"host": [
 								"localhost"
 							],
@@ -73,11 +169,61 @@
 							"path": [
 								"api",
 								"v1",
+								"user",
 								"session"
 							]
 						}
 					},
-					"response": []
+					"response": [
+						{
+							"name": "login",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\":\"akmal@mail.com\",\n    \"password\":\"password\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/api/v1/user/session",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"user",
+										"session"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 14 Nov 2024 03:06:54 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "275"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"meta\": {\n        \"message\": \"Successfully logged in\",\n        \"code\": 200,\n        \"status\": \"success\"\n    },\n    \"data\": {\n        \"id\": 1,\n        \"name\": \"Akmal\",\n        \"occupation\": \"Software Developer\",\n        \"email\": \"akmal@mail.com\",\n        \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxfQ.WbqSwup9YAEk5hSIqS7YgK5h4fAIOeFvA7U-4pdx9_0\"\n    }\n}"
+						}
+					]
 				},
 				{
 					"name": "email check",
@@ -94,7 +240,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8080/api/v1/email-check",
+							"raw": "localhost:8080/api/v1/user/email-check",
 							"host": [
 								"localhost"
 							],
@@ -102,11 +248,61 @@
 							"path": [
 								"api",
 								"v1",
+								"user",
 								"email-check"
 							]
 						}
 					},
-					"response": []
+					"response": [
+						{
+							"name": "email check",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\":\"akmal@mail.com\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/api/v1/user/email-check",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"user",
+										"email-check"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 14 Nov 2024 03:09:19 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "107"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"meta\": {\n        \"message\": \"Email has been registered\",\n        \"code\": 200,\n        \"status\": \"success\"\n    },\n    \"data\": {\n        \"isAvailable\": false\n    }\n}"
+						}
+					]
 				},
 				{
 					"name": "avatar",
@@ -129,12 +325,12 @@
 								{
 									"key": "avatar",
 									"type": "file",
-									"src": "/Users/itommey/Downloads/hq7ryh40b1fpvf2zmuf1.png"
+									"src": "/C:/Users/rafif/Downloads/photo_6167982055837777969_w.jpg"
 								}
 							]
 						},
 						"url": {
-							"raw": "localhost:8080/api/v1/avatar",
+							"raw": "localhost:8080/api/v1/user/avatar",
 							"host": [
 								"localhost"
 							],
@@ -142,11 +338,62 @@
 							"path": [
 								"api",
 								"v1",
+								"user",
 								"avatar"
 							]
 						}
 					},
-					"response": []
+					"response": [
+						{
+							"name": "avatar",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "avatar",
+											"type": "file",
+											"src": "/C:/Users/rafif/Downloads/photo_6167982055837777969_w.jpg"
+										}
+									]
+								},
+								"url": {
+									"raw": "localhost:8080/api/v1/user/avatar",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"user",
+										"avatar"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 14 Nov 2024 03:09:28 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "108"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"meta\": {\n        \"message\": \"Success upload avatar image\",\n        \"code\": 200,\n        \"status\": \"success\"\n    },\n    \"data\": {\n        \"is_uploaded\": true\n    }\n}"
+						}
+					]
 				}
 			]
 		},
@@ -159,7 +406,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:8080/api/v1/campaigns?user_id=14",
+							"raw": "localhost:8080/api/v1/campaign?user_id=1",
 							"host": [
 								"localhost"
 							],
@@ -167,17 +414,62 @@
 							"path": [
 								"api",
 								"v1",
-								"campaigns"
+								"campaign"
 							],
 							"query": [
 								{
 									"key": "user_id",
-									"value": "14"
+									"value": "1"
 								}
 							]
 						}
 					},
-					"response": []
+					"response": [
+						{
+							"name": "list campaigns",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/api/v1/campaign?user_id=1",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"campaign"
+									],
+									"query": [
+										{
+											"key": "user_id",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 14 Nov 2024 03:09:40 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "289"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"meta\": {\n        \"message\": \"List of campaigns\",\n        \"code\": 200,\n        \"status\": \"success\"\n    },\n    \"data\": [\n        {\n            \"id\": 1,\n            \"user_id\": 1,\n            \"name\": \"campaign baru nih\",\n            \"short_description\": \"deskripsi singkat\",\n            \"description\": \"deskripsi panjang\",\n            \"image_url\": \"\",\n            \"goal_amount\": 1000000000,\n            \"current_amount\": 0,\n            \"slug\": \"campaign-baru-nih-1\"\n        }\n    ]\n}"
+						}
+					]
 				},
 				{
 					"name": "detail campaign",
@@ -198,7 +490,47 @@
 							]
 						}
 					},
-					"response": []
+					"response": [
+						{
+							"name": "detail campaign",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/api/v1/campaign/1",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"campaign",
+										"1"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 14 Nov 2024 03:08:41 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "471"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"meta\": {\n        \"message\": \"Success get detail campaign\",\n        \"code\": 200,\n        \"status\": \"success\"\n    },\n    \"data\": {\n        \"id\": 1,\n        \"user_id\": 1,\n        \"name\": \"campaign baru nih\",\n        \"short_description\": \"deskripsi singkat\",\n        \"description\": \"deskripsi panjang\",\n        \"image_url\": \"\",\n        \"goal_amount\": 1000000000,\n        \"current_amount\": 0,\n        \"backer_count\": 0,\n        \"slug\": \"campaign-baru-nih-1\",\n        \"perks\": [\n            \"Peduli kemanusiaan\",\n            \"Peduli kasih\",\n            \"Peduli lingkungan\"\n        ],\n        \"user\": {\n            \"name\": \"Akmal\",\n            \"image_url\": \"images/1-photo_6167982055837777969_w.jpg\"\n        },\n        \"images\": []\n    }\n}"
+						}
+					]
 				},
 				{
 					"name": "create campaign",
@@ -237,7 +569,55 @@
 							]
 						}
 					},
-					"response": []
+					"response": [
+						{
+							"name": "create campaign",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\":\"campaign baru lagi nih\",\n    \"short_description\":\"deskripsi singkat\",\n    \"description\":\"deskripsi panjang\",\n    \"goal_amount\":1000000000,\n    \"perks\":\"Peduli kemanusiaan, Peduli kasih, Peduli lingkungan\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/api/v1/campaign",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"campaign"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 14 Nov 2024 03:11:11 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "303"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"meta\": {\n        \"message\": \"Success create campaign\",\n        \"code\": 200,\n        \"status\": \"success\"\n    },\n    \"data\": {\n        \"id\": 2,\n        \"user_id\": 1,\n        \"name\": \"campaign baru lagi nih\",\n        \"short_description\": \"deskripsi singkat\",\n        \"description\": \"deskripsi panjang\",\n        \"image_url\": \"\",\n        \"goal_amount\": 1000000000,\n        \"current_amount\": 0,\n        \"slug\": \"campaign-baru-lagi-nih-1\"\n    }\n}"
+						}
+					]
 				},
 				{
 					"name": "update campaign",
@@ -264,7 +644,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8080/api/v1/campaign/2",
+							"raw": "localhost:8080/api/v1/campaign/1",
 							"host": [
 								"localhost"
 							],
@@ -273,11 +653,60 @@
 								"api",
 								"v1",
 								"campaign",
-								"2"
+								"1"
 							]
 						}
 					},
-					"response": []
+					"response": [
+						{
+							"name": "update campaign",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\":\"campaign baru nih tapi updated\",\n    \"short_description\":\"deskripsi singkat\",\n    \"description\":\"deskripsi panjang\",\n    \"goal_amount\":1000000000,\n    \"perks\":\"Peduli kemanusiaan, Peduli kasih, Peduli lingkungan\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/api/v1/campaign/1",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"campaign",
+										"1"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 14 Nov 2024 03:10:38 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "332"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"meta\": {\n        \"message\": \"Success update campaign\",\n        \"code\": 200,\n        \"status\": \"success\"\n    },\n    \"data\": {\n        \"id\": 1,\n        \"user_id\": 1,\n        \"name\": \"campaign baru nih tapi updated\",\n        \"short_description\": \"deskripsi singkat\",\n        \"description\": \"deskripsi panjang\",\n        \"image_url\": \"images/1-Poster - GYSP.png\",\n        \"goal_amount\": 1000000000,\n        \"current_amount\": 0,\n        \"slug\": \"campaign-baru-nih-1\"\n    }\n}"
+						}
+					]
 				},
 				{
 					"name": "campaign image",
@@ -300,7 +729,7 @@
 								{
 									"key": "file",
 									"type": "file",
-									"src": "/Users/itommey/Downloads/dos_fb13e039bf8c98e252b54d1160ab751020220517182014.jpeg"
+									"src": "/C:/Users/rafif/Downloads/Poster - GYSP.png"
 								},
 								{
 									"key": "campaign_id",
@@ -315,7 +744,7 @@
 							]
 						},
 						"url": {
-							"raw": "localhost:8080/api/v1/campaign-image",
+							"raw": "localhost:8080/api/v1/campaign/image",
 							"host": [
 								"localhost"
 							],
@@ -323,11 +752,72 @@
 							"path": [
 								"api",
 								"v1",
-								"campaign-image"
+								"campaign",
+								"image"
 							]
 						}
 					},
-					"response": []
+					"response": [
+						{
+							"name": "campaign image",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "file",
+											"type": "file",
+											"src": "/C:/Users/rafif/Downloads/Poster - GYSP.png"
+										},
+										{
+											"key": "campaign_id",
+											"value": "1",
+											"type": "text"
+										},
+										{
+											"key": "is_primary",
+											"value": "true",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "localhost:8080/api/v1/campaign/image",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"campaign",
+										"image"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 14 Nov 2024 03:10:09 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "113"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"meta\": {\n        \"message\": \"Success to upload campaign image\",\n        \"code\": 200,\n        \"status\": \"success\"\n    },\n    \"data\": {\n        \"is_uploaded\": true\n    }\n}"
+						}
+					]
 				}
 			]
 		},
@@ -350,7 +840,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:8080/api/v1/campaign/1/transactions",
+							"raw": "localhost:8080/api/v1/transaction/1/campaign",
 							"host": [
 								"localhost"
 							],
@@ -358,9 +848,9 @@
 							"path": [
 								"api",
 								"v1",
-								"campaign",
+								"transaction",
 								"1",
-								"transactions"
+								"campaign"
 							]
 						}
 					},
@@ -382,7 +872,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:8080/api/v1/transactions",
+							"raw": "localhost:8080/api/v1/transaction",
 							"host": [
 								"localhost"
 							],
@@ -390,7 +880,7 @@
 							"path": [
 								"api",
 								"v1",
-								"transactions"
+								"transaction"
 							]
 						}
 					},
@@ -404,7 +894,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "accessTokenCrowdfunding",
+									"value": "{{accessTokenCrowdfunding}}",
 									"type": "string"
 								}
 							]
@@ -421,7 +911,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8080/api/v1/transactions",
+							"raw": "localhost:8080/api/v1/transaction",
 							"host": [
 								"localhost"
 							],
@@ -429,7 +919,7 @@
 							"path": [
 								"api",
 								"v1",
-								"transactions"
+								"transaction"
 							]
 						}
 					},
