@@ -11,13 +11,13 @@ type Service interface {
 	ValidateToken(token string) (*jwt.Token, error)
 }
 
-type jwtService struct{}
-
-func NewService() *jwtService {
-	return &jwtService{}
+type jwtService struct {
+	secretKey string
 }
 
-var SECRET_KEY = []byte("very-secret")
+func NewService(secretKey string) *jwtService {
+	return &jwtService{secretKey: secretKey}
+}
 
 func (s *jwtService) GenerateToken(userID int) (string, error) {
 	claim := jwt.MapClaims{}
@@ -25,7 +25,7 @@ func (s *jwtService) GenerateToken(userID int) (string, error) {
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claim)
 
-	signedToken, err := token.SignedString(SECRET_KEY)
+	signedToken, err := token.SignedString([]byte(s.secretKey))
 
 	if err != nil {
 		return signedToken, err
@@ -40,7 +40,7 @@ func (s *jwtService) ValidateToken(encodedToken string) (*jwt.Token, error) {
 		if !ok {
 			return nil, errors.New("INVALID TOKEN")
 		}
-		return []byte(SECRET_KEY), nil
+		return []byte(s.secretKey), nil
 	})
 
 	if err != nil {

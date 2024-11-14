@@ -39,9 +39,9 @@ func main() {
 	transactionRepository := transaction.NewRepository(db)
 
 	userService := user.NewService(userRepository)
-	authService := auth.NewService()
+	authService := auth.NewService(config.Service.SecretKey)
 	campaignService := campaign.NewService(campaignRepository)
-	paymentService := payment.NewService()
+	paymentService := payment.NewService(config.Midtrans)
 	transactionService := transaction.NewService(transactionRepository, campaignRepository, paymentService)
 
 	userHandler := handler.NewUserHandler(userService, authService)
